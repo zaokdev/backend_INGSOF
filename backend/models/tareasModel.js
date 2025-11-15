@@ -1,17 +1,24 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
-const tareaSchema = mongoose.Schema({
-    user:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
+const tareaSchema = mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
     texto: {
-        type: String,
-        required: [true, "Por favor teclea un texto para la tarea"]
-    }
-},{
-    timestamps : true
-})
+      type: String,
+      required: [true, "Por favor teclea un texto para la tarea"],
+    },
+    titulo: {
+      type: String,
+      required: [true, "Por favor teclea un titulo para la tarea"],
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 
-module.exports = mongoose.model('Tarea', tareaSchema)
+module.exports = mongoose.model("Tarea", tareaSchema);

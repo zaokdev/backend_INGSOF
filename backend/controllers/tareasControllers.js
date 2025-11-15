@@ -7,12 +7,13 @@ const getTareas = asyncHandler(async (req, res) => {
 });
 
 const createTareas = asyncHandler(async (req, res) => {
-  if (!req.body.texto) {
+  if (!req.body.titulo || !req.body.texto) {
     res.status(400);
     throw new Error("Favor de teclear un texto de la tarea");
   }
   const tarea = await Tarea.create({
     texto: req.body.texto,
+    titulo: req.body.titulo,
     user: req.user.id,
   });
   res.status(201).json(tarea);
@@ -29,14 +30,11 @@ const updateTareas = asyncHandler(async (req, res) => {
   if (tarea.user.toString() !== req.user.id) {
     res.status(401);
     throw new Error("Acceso no autorizado");
-  } else {
-    const tareaUpdated = await Tarea.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-    res.status(200).json(tareaUpdated);
   }
+  const tareaUpdated = await Tarea.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+  });
+  res.status(200).json(tareaUpdated);
 });
 
 const deleteTareas = asyncHandler(async (req, res) => {
@@ -50,10 +48,9 @@ const deleteTareas = asyncHandler(async (req, res) => {
   if (tarea.user.toString() !== req.user.id) {
     res.status(401);
     throw new Error("Acceso no autorizado");
-  } else {
-    await tarea.deleteOne();
-    res.status(200).json({ id: req.params.id });
   }
+  await tarea.deleteOne();
+  res.status(200).json({ id: req.params.id });
 });
 
 module.exports = {
